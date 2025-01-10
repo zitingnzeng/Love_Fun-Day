@@ -1,0 +1,232 @@
+/* style.css */
+.navbar-brand {
+    background: linear-gradient(to right, #617dfa, #cd95ea); /* 深藍到深紫的平滑漸層 */
+    width: 100%;
+    background-blend-mode: multiply; /* 增加混合效果讓漸層更自然 */
+}
+
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+footer {
+    
+    margin-top: auto;
+}
+
+#heroCarousel {
+    margin-bottom: 30px; /* 可以根據需要調整數值 */
+}
+
+.carousel-item img {
+    height: 400px;
+    object-fit: cover;
+}
+
+.bg-custom {
+    background-color: #C4EBF0 !important;
+}
+
+ /* 頁首 */
+a {
+    color: white; /* 設置文字顏色為白色 */
+    text-decoration: none; /* 移除下劃線 */
+    font-weight: bold; /* 設置文字為加粗 */
+}
+
+.privacy-policy-link {
+    color: white; /* 預設文字顏色 */
+    text-decoration: none; /* 移除下劃線 */
+    transition: color 0.3s, text-decoration 0.3s; /* 平滑過渡 */
+}
+
+.privacy-policy-link:hover {
+    color: #ecb6e8;
+    text-decoration: none;
+}
+
+.nav-link {
+    color: white !important;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    color: #f4bef0 !important;
+}
+
+/* 聯絡人 */
+.circle-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.circle-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 發送訊息按鈕樣式 */
+.send-button a {
+    text-decoration: none;
+    padding: 10px 20px;
+    background: linear-gradient(90deg, rgb(183, 211, 255), rgb(248, 210, 255));
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.send-button a:hover {
+    transform: scale(1.05);
+    color: white;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 回首頁按鈕樣式 */
+.back-to-home a {
+    text-decoration: none;
+    padding: 10px 20px;
+    background: linear-gradient(90deg, rgb(183, 211, 255), rgb(248, 210, 255));
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.back-to-home a:hover {
+    transform: scale(1.05);
+    color: white;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 最新消息樣式 */
+.news-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #fb9dcc;
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.news-label-purple {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ea9df1; /* 紫色 */
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.news-section {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+}
+
+.news-container {
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* 元素間距 */
+}
+
+.news-item {
+    display: flex;
+    overflow: hidden; /* 隱藏超出內容 */
+    align-items: center; /* 水平置中對齊 */
+    width: 32%; /* 區塊寬度 */
+    height: 200px; /* 固定高度 */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: left; /* 文字靠左對齊 */
+}
+
+.news-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.news-item img {
+    max-width: 100%;
+    max-height: 100px; /* 限制圖片高度 */
+    object-fit: cover; /* 圖片覆蓋但保持比例 */
+    border-radius: 8px; /* 圓角設計 */
+    margin: 10px; /* 圖片與文字之間的空隙 */
+}
+
+.news-item h5 {
+    font-size: 20px;
+    margin: 5px 5 15px;
+    text-align: center; /* 標題文字置中對齊 */
+}
+
+.news-item p {
+    font-size: 14px;
+    color: #555;
+    margin: 15;
+    line-height: 1.4;
+    text-align: left; /* 敘述文字靠左對齊 */
+}
+
+/* 隱私權政策樣式 */
+.privacy-policy h2 {
+    font-weight: bold;
+    color: #414548;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 30px;
+}
+
+.privacy-policy p {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    line-height: 1.6; /* 行高設定適中，增加閱讀性 */
+    padding: 0 50px; /* 添加內邊距 */
+
+}
+
+
+/* 響應式設計 */
+@media (max-width: 992px) {
+    .news-item {
+        width: 48%; /* 中型螢幕每行顯示兩個 */
+        height: 250px; /* 高度稍微調整 */
+    }
+}
+
+@media (max-width: 768px) {
+    .news-item {
+        width: 100%; /* 小型螢幕每行顯示一個 */
+        height: auto; /* 高度自動適應 */
+    }
+
+    .news-item img {
+        max-height: 200px; /* 小螢幕圖片適當放大 */
+    }
+}

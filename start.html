@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>遊樂園入口 - RFID 感應手環模擬</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+</head>
+<style>
+  .navbar-brand {
+    background: linear-gradient(to right, #617dfa, #cd95ea); /* 深藍到深紫的平滑漸層 */
+    width: 100%;
+    background-blend-mode: multiply; /* 增加混合效果讓漸層更自然 */
+  }
+  .navbar-brand .navbar { /* 樣式僅適用於「樂翻天遊樂園」 */
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark navbar-brand">
+    <div class="container-fluid">
+      <a class="navbar" href="index.html">樂翻天（Love Fun 天）遊樂園</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="切換導航">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- 新增首頁選項 -->
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" title="首頁">
+                        <i class="fas fa-home"></i> 首頁
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="memberDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> 入園
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="memberDropdown">
+                        <li>
+                            <a class="dropdown-item" href="register.html" title="註冊">
+                                <i class="fas fa-user-plus"></i> 註冊
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="start.html" title="登入">
+                                <i class="fas fa-sign-in-alt"></i> 登入
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- 關於我們下拉式選單 -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="socialMediaDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        關於我們
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="socialMediaDropdown">
+                        <li>
+                            <a class="dropdown-item" href="contact.html" title="聯繫我們">
+                                <i class="fas fa-phone"></i> 聯繫我們
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="https://www.instagram.com/love_fun_0101/" target="_blank" title="Instagram">
+                                <i class="fab fa-instagram"></i> Instagram
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="https://www.facebook.com/profile.php?id=61571893013227&is_tour_dismissed" target="_blank" title="Facebook">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- 語言切換下拉式選單 -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-language"></i> 語言
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="start.html">中文</a></li>
+                        <li><a class="dropdown-item" href="start_e.html">English</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+  <div id="app">
+    <!-- 初始畫面 -->
+    <div class="container mt-5" id="initial-screen">
+      <div class="text-center">
+        <h1 class="mb-4">遊樂園入口</h1>
+        <div class="card p-4 shadow-lg">
+          <div id="rfid-status" class="alert alert-info">
+            <strong>請輸入手環 ID 並按下確認！</strong>
+          </div>
+          <form id="rfid-form" onsubmit="handleRFIDInput(event)">
+            <div class="mb-3">
+              <label for="rfid-input" class="form-label">手環 ID</label>
+              <input type="text" class="form-control" id="rfid-input" placeholder="例如：請輸入手環 ID" required>
+            </div>
+            <button type="submit" class="btn btn-primary">確認</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使用者模式畫面 -->
+    <div class="container mt-5 d-none" id="user-mode-screen">
+      <div class="text-center">
+        <h1 class="mb-4 text-info">使用者模式</h1>
+        <div class="card p-4 shadow-lg">
+          <p class="fs-5">歡迎使用！</p>
+          <p>請選擇功能：</p>
+
+          <div class="mb-3">
+            <select id="user-options" class="form-select" onchange="handleUserOptionChange()">
+              <option value="" selected disabled>請選擇功能</option>
+              <option value="balance">查詢餘額</option>
+              <option value="payment">確認支付</option>
+              <option value="recharge">儲值金額</option>
+              <option value="transaction">交易紀錄</option>
+            </select>
+          </div>
+
+          <div class="mt-3">
+            <button class="btn btn-warning" onclick="temporaryLeave()">暫時離開</button>
+            <button class="btn btn-danger ms-2" onclick="exitPark()">出園</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-database-compat.js"></script>
+  <script>
+    // Firebase 設定
+    const firebaseConfig = {
+      apiKey: "your-api-key",
+      authDomain: "rfid-22b6f.firebaseapp.com",
+      databaseURL: "https://rfid-22b6f-default-rtdb.asia-southeast1.firebasedatabase.app/",
+      projectId: "rfid-22b6f",
+      storageBucket: "rfid-22b6f.appspot.com",
+      messagingSenderId: "your-sender-id",
+      appId: "your-app-id"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    let balance = 0;
+    let transactionHistory = [];
+
+    function handleRFIDInput(event) {
+      event.preventDefault();
+      const inputElement = document.getElementById('rfid-input');
+      const enteredID = inputElement.value.trim();
+
+      if (enteredID !== '') {
+        const userRef = database.ref('users/' + enteredID);
+
+        userRef.once('value').then((snapshot) => {
+          if (snapshot.exists()) {
+            const userData = snapshot.val();
+            balance = userData.balance || 0;
+
+            
+
+            // 記錄入場時間
+            const entranceTime = new Date().toISOString();  // 獲取 ISO 格式的時間
+
+            // 更新入場時間
+            userRef.update({
+              entranceTime: entranceTime
+            });
+
+            Swal.fire({
+              title: '入場成功',
+              text: `您的手環 ID: ${enteredID}\n入場時間: ${entranceTime}`,
+              icon: 'success',
+              confirmButtonText: '確定',
+            }).then(() => {
+              document.getElementById('initial-screen').classList.add('d-none');
+              document.getElementById('user-mode-screen').classList.remove('d-none');
+            });
+          } else {
+            Swal.fire('錯誤', '無法找到此手環 ID，請檢查！', 'error');
+          }
+        });
+      } else {
+        Swal.fire('錯誤', '請輸入有效的手環 ID！', 'error');
+      }
+    }
+
+    function updateBalanceInFirebase(userId, newBalance) {
+      const userRef = database.ref('users/' + userId);
+      userRef.update({
+        balance: newBalance
+      });
+    }
+
+    function handleUserOptionChange() {
+      const selectedOption = document.getElementById('user-options').value;
+      const userId = document.getElementById('rfid-input').value.trim();
+
+      switch (selectedOption) {
+        case 'balance':
+          Swal.fire({
+            title: '目前餘額',
+            text: `您的餘額為 ${balance} 元`,
+            icon: 'info',
+          });
+          break;
+
+        case 'payment':
+          Swal.fire({
+            title: '確認支付',
+            input: 'number',
+            inputLabel: '請輸入消費金額',
+            inputAttributes: {
+              min: 1,
+            },
+            showCancelButton: true,
+            confirmButtonText: '支付',
+            cancelButtonText: '取消',
+            inputValidator: (value) => {
+              if (!value || value <= 0) {
+                return '請輸入有效的金額！';
+              }
+            },
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const paymentAmount = parseInt(result.value, 10);
+              if (paymentAmount > balance) {
+                Swal.fire('錯誤', '餘額不足，無法支付！', 'error');
+              } else {
+                const paymentTime = new Date().toISOString(); // 記錄支付時間
+                balance -= paymentAmount;
+                updateBalanceInFirebase(userId, balance);
+                transactionHistory.push(`消費：${paymentAmount} 元 (時間: ${paymentTime})`);
+
+                // 更新Firebase中的交易紀錄
+                const transactionRef = database.ref('users/' + userId + '/transactionHistory');
+                transactionRef.push({
+                  type: 'payment',
+                  amount: paymentAmount,
+                  time: paymentTime,
+                });
+
+                Swal.fire('支付成功', `您支付了 ${paymentAmount} 元，剩餘餘額為 ${balance} 元`, 'success');
+              }
+            }
+          });
+          break;
+          
+        case 'recharge':
+          Swal.fire({
+            title: '儲值金額',
+            input: 'number',
+            inputLabel: '請輸入儲值金額',
+            inputAttributes: {
+              min: 1,
+            },
+            showCancelButton: true,
+            confirmButtonText: '儲值',
+            cancelButtonText: '取消',
+            inputValidator: (value) => {
+              if (!value || value <= 0) {
+                return '請輸入有效的金額！';
+              }
+            },
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const rechargeAmount = parseInt(result.value, 10);
+              const rechargeTime = new Date().toISOString(); // 記錄儲值時間
+              balance += rechargeAmount;
+              updateBalanceInFirebase(userId, balance);
+              transactionHistory.push(`儲值：${rechargeAmount} 元 (時間: ${rechargeTime})`);
+
+              // 更新Firebase中的交易紀錄
+              const transactionRef = database.ref('users/' + userId + '/transactionHistory');
+              transactionRef.push({
+                type: 'recharge',
+                amount: rechargeAmount,
+                time: rechargeTime,
+              });
+
+              Swal.fire('儲值成功', `您儲值了 ${rechargeAmount} 元，總餘額為 ${balance} 元`, 'success');
+            }
+          });
+          break;
+
+        case 'transaction':
+          if (transactionHistory.length === 0) {
+            Swal.fire('交易紀錄', '目前沒有交易紀錄。', 'info');
+          } else {
+            Swal.fire({
+              title: '當日交易紀錄',
+              html: transactionHistory.map((item) => `<p>${item}</p>`).join(''),
+              icon: 'info',
+            });
+          }
+          break;
+
+        default:
+          Swal.fire('錯誤', '請選擇功能！', 'error');
+      }
+    }
+
+    // 暫時離開函數
+    function temporaryLeave() {
+      Swal.fire('暫時離開', '您已經離開，等您回來歐！', 'info').then(() => {
+        // 隱藏使用者模式畫面並顯示入口頁面
+        document.getElementById('user-mode-screen').classList.add('d-none');
+        document.getElementById('initial-screen').classList.remove('d-none');
+      });
+    }
+
+    // 出園函數
+    function exitPark() {
+      const userId = document.getElementById('rfid-input').value.trim();
+      
+      // 確認是否真的要刪除資料
+      Swal.fire({
+        title: '確定要出園嗎?',
+        text: '出園後您將無法再入園！',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '確定出園',
+        cancelButtonText: '取消',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const userRef = database.ref('users/' + userId);
+
+          // 刪除該用戶的資料
+          userRef.remove()
+            .then(() => {
+              Swal.fire('出園成功', '感謝您的光臨！', 'success').then(() => {
+                // 返回首頁
+                document.getElementById('user-mode-screen').classList.add('d-none');
+                document.getElementById('initial-screen').classList.remove('d-none');
+              });
+            })
+            .catch((error) => {
+              Swal.fire('錯誤', '刪除資料時發生錯誤，請稍後再試！', 'error');
+              console.error('刪除資料失敗:', error);
+            });
+        }
+      });
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
